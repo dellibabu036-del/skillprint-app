@@ -16,9 +16,18 @@ exports.handler = async (event) => {
   }
 
   const { text } = payload;
-  if (!text || text.length < 50) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Text too short' }) };
+  
+  // 1. Validation FIRST (Prevents crashes if text is empty)
+  if (!text || text.trim().length < 50) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Text too short (50+ chars required)' }) };
   }
+
+  // 2. Truncate text to save credits (Max 1250 words)
+  const MAX_WORDS = 1250;
+  let words = text.trim().split(/\s+/);
+  const truncatedText = words.length > MAX_WORDS 
+    ? words.slice(0, MAX_WORDS).join(' ') 
+    : text;
 
   try {
     const response = await fetch('https://api.gowinston.ai/v2/plagiarism', {
@@ -27,26 +36,32 @@ exports.handler = async (event) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify({ text, language: 'en' })
+      // 3. USE truncatedText HERE (This was missing in your file!)
+      body: JSON.stringify({ text: truncatedText, language: 'en' })
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      console.error('Winston error:', response.status, await response.text());
-      return { statusCode: 502, body: JSON.stringify({ error: 'Plagiarism service unavailable' }) };
+      console.error('Winston error:', response.status, data);
+      return { statusCode: 502, body: JSON.stringify({ error: data.description || 'Plagiarism service unavailable' }) };
     }
 
-    const data = await response.json();
+    // 4. Parse the v2 response correctly
+    const score = data.result?.score ?? 0;
+    const wordCount = data.result?.textWordCounts ?? truncatedText.split(/\s+/).length;
+    const sources = data.sources || [];
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        plagiarism_percentage: data.score || 0,
-        unique_percentage: 100 - (data.score || 0),
-        total_words: data.textWordCount || text.split(/\s+/).length,
-        sources: (data.sources || []).map(s => ({
+        plagiarism_percentage: score,
+        unique_percentage: 100 - score,
+        total_words: wordCount,
+        sources: sources.map(s => ({
           url: s.url || s.sourceUrl || '',
-          matched_text: s.severity || s.title || 'Source detected'
+          matched_text: s.title || s.severity || 'Source detected'
         }))
       })
     };
