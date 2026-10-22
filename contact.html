@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Skillprint</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
+body{background:linear-gradient(135deg,#e0f2fe,#ccfbf1 50%,#fef3c7);min-height:100vh;color:#0f172a;line-height:1.7}
+.wrap{max-width:800px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.back{display:inline-flex;align-items:center;gap:.5rem;background:#1e40af;color:#fff;padding:.6rem 1.2rem;border-radius:50px;text-decoration:none;font-weight:700;margin-bottom:2rem;font-size:.9rem;transition:.3s}
+.back:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(30,64,175,.3)}
+.card{background:#fff;padding:2.5rem;border-radius:20px;box-shadow:0 8px 20px rgba(6,182,212,.15);margin-bottom:1.5rem;border-top:5px solid #ec4899}
+h1{color:#ec4899;font-size:2rem;margin-bottom:.3rem}
+h2{color:#1e40af;font-size:1.2rem;margin:1.5rem 0 .6rem}
+p,li{color:#0f172a;margin-bottom:.7rem}
+a{color:#06b6d4;font-weight:700}
+.contact-option{background:#f0f9ff;padding:1.2rem;border-radius:14px;margin-bottom:1rem;border-left:4px solid #06b6d4}
+.contact-option h3{color:#1e40af;font-size:1rem;margin-bottom:.3rem}
+.contact-option p{color:#64748b;font-size:.88rem;margin:0}
+.contact-option a{font-size:1rem}
+.form-row{margin-bottom:1rem}
+label{display:block;font-weight:700;font-size:.85rem;color:#64748b;margin-bottom:.3rem}
+input,textarea,select{width:100%;padding:.8rem 1rem;border:2px solid #cbd5e1;border-radius:12px;font-size:.95rem;outline:none;background:#fff;color:#0f172a;font-family:inherit}
+input:focus,textarea:focus,select:focus{border-color:#06b6d4}
+textarea{min-height:120px;resize:vertical}
+button{background:linear-gradient(90deg,#3b82f6,#06b6d4);color:#fff;padding:.9rem 2rem;border:none;border-radius:50px;font-weight:800;cursor:pointer;font-family:inherit;font-size:1rem;transition:.3s}
+button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(6,182,212,.4)}
+.footer{text-align:center;margin-top:2rem;color:#64748b;font-size:.85rem}
+.footer a{color:#1e40af;margin:0 .5rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Back to Skillprint</a>
+
+<div class="card">
+<h1>📧 Contact Us</h1>
+<p style="color:#64748b;margin-bottom:1.5rem;">We'd love to hear from you. Reach out for support, feedback, or partnership inquiries.</p>
+
+<div class="contact-option">
+<h3>🆘 Support & Bug Reports</h3>
+<p>Found a bug or need help? Email us at:</p>
+<a href="mailto:support@skillprint.app">support@skillprint.app</a>
+</div>
+
+<div class="contact-option">
+<h3>💼 Business & Partnerships</h3>
+<p>Interested in sponsoring, collaborating, or advertising?</p>
+<a href="mailto:business@skillprint.app">business@skillprint.app</a>
+</div>
+
+<div class="contact-option">
+<h3>💡 Feature Requests</h3>
+<p>Have an idea to make Skillprint better?</p>
+<a href="mailto:ideas@skillprint.app">ideas@skillprint.app</a>
+</div>
+
+<div class="contact-option">
+<h3>📢 Press & Media</h3>
+<p>Writing about Skillprint? We're happy to help.</p>
+<a href="mailto:press@skillprint.app">press@skillprint.app</a>
+</div>
+</div>
+
+<div class="card">
+<h2>📝 Send Us a Message</h2>
+<p style="color:#64748b;font-size:.88rem;margin-bottom:1rem;">Fill the form below and we'll get back within 24–48 hours.</p>
+<form onsubmit="sendContactForm(event)">
+<div class="form-row">
+<label>Your Name</label>
+<input type="text" id="cName" placeholder="Ravi Kumar" required>
+</div>
+<div class="form-row">
+<label>Email</label>
+<input type="email" id="cEmail" placeholder="ravi@email.com" required>
+</div>
+<div class="form-row">
+<label>Subject</label>
+<select id="cSubject">
+<option>Support Request</option>
+<option>Bug Report</option>
+<option>Feature Suggestion</option>
+<option>Business Inquiry</option>
+<option>General Feedback</option>
+</select>
+</div>
+<div class="form-row">
+<label>Message</label>
+<textarea id="cMessage" placeholder="Describe in detail..." required></textarea>
+</div>
+<button type="submit">Send Message 📨</button>
+</form>
+</div>
+
+</div>
+<div class="footer">
+<a href="index.html">Home</a> • <a href="about.html">About</a> • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a>
+<br>© 2026 Skillprint. Made with 💛 in India.
+</div>
+
+<script>
+function sendContactForm(e){
+  e.preventDefault();
+  const name = document.getElementById('cName').value.trim();
+  const email = document.getElementById('cEmail').value.trim();
+  const subject = document.getElementById('cSubject').value;
+  const message = document.getElementById('cMessage').value.trim();
+  if(!name || !email || !message){
+    alert('Please fill all fields');
+    return;
+  }
+  const mailto = `mailto:support@skillprint.app?subject=${encodeURIComponent(subject + ' from ' + name)}&body=${encodeURIComponent('From: ' + name + ' (' + email + ')\n\n' + message)}`;
+  window.location.href = mailto;
+  alert('Opening your email app... If it does not open, email us directly at support@skillprint.app');
+}
+</script>
+</body>
+</html>
