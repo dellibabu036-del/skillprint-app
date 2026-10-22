@@ -21,7 +21,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const response = await fetch('https://api.gowinston.ai/v1/plagiarism', {
+    const response = await fetch('https://api.gowinston.ai/v2/plagiarism', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
